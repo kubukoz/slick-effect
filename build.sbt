@@ -22,7 +22,7 @@ val compilerPlugins = List(
 )
 
 val commonSettings = Seq(
-  scalaVersion := "2.12.8",
+  scalaVersion := "2.11.11",
   Options.addAll,
   fork in Test := true,
   crossScalaVersions := Seq(Scala_2_11, Scala_2_12),
