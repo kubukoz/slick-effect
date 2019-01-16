@@ -33,7 +33,7 @@ class DBIOInstanceTests extends CatsSuite {
     Arbitrary(
       Gen.oneOf(
         Arbitrary.arbitrary[T].map(DBIO.successful),
-        Arbitrary.arbitrary[Throwable].map(DBIO.failed),
+        Arbitrary.arbitrary[Throwable].map(DBIO.failed)
       )
     )
 

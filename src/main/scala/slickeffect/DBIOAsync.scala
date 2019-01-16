@@ -5,6 +5,7 @@ import cats.effect.{Async, ExitCase}
 import slick.dbio.DBIO
 
 import scala.concurrent.{ExecutionContext, Promise}
+import scala.util.{Failure, Success}
 
 private[slickeffect] class DBIOAsync(implicit ec: ExecutionContext) extends Async[DBIO] {
   private implicit val monadErrorInstance: MonadError[DBIO, Throwable] = this
@@ -56,7 +57,11 @@ private[slickeffect] class DBIOAsync(implicit ec: ExecutionContext) extends Asyn
     case Right(b) => pure(b)
   }
 
-  override def raiseError[A](e: Throwable): DBIO[A]                              = DBIO.failed(e)
-  override def handleErrorWith[A](fa: DBIO[A])(f: Throwable => DBIO[A]): DBIO[A] = fa.asTry.flatMap(_.fold(f, pure))
-  override def pure[A](x: A): DBIO[A]                                            = DBIO.successful(x)
+  override def raiseError[A](e: Throwable): DBIO[A] = DBIO.failed(e)
+  override def handleErrorWith[A](fa: DBIO[A])(f: Throwable => DBIO[A]): DBIO[A] = fa.asTry.flatMap {
+    case Success(value) => pure(value)
+    case Failure(e)     => f(e)
+  }
+
+  override def pure[A](x: A): DBIO[A] = DBIO.successful(x)
 }
