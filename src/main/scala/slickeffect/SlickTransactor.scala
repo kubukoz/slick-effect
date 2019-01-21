@@ -33,12 +33,11 @@ object SlickTransactor {
 
   def liftNT[F[_]](f: DBIO ~> F): SlickTransactor[F] = new SlickTransactor[F] { override val transactK: DBIO ~> F = f }
 
-  //////////////
-  //CONFIGURATION
-  //////////////
+  object configuration {
 
-  def transactionally(implicit profile: JdbcProfile): DBIO ~> DBIO = {
-    import profile.api.{DBIO => _, _}
-    λ[DBIO ~> DBIO](_.transactionally)
+    def transactionally(implicit profile: JdbcProfile): DBIO ~> DBIO = {
+      import profile.api.{DBIO => _, _}
+      λ[DBIO ~> DBIO](_.transactionally)
+    }
   }
 }
