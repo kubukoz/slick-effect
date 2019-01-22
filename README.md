@@ -8,8 +8,8 @@ Compatibility tools for Slick + cats-effect. Released for Scala 2.12 and 2.11.
 
 Add the dependency. SBT:
 
-```
-"com.kubukoz" %% "slick-effect" % "0.1.0"
+```sbt
+libraryDependencies += "com.kubukoz" %% "slick-effect" % "0.1.0"
 ```
 
 Import the instances:
