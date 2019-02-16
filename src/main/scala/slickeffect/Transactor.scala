@@ -16,6 +16,7 @@ trait Transactor[F[_]] {
 }
 
 object Transactor {
+  def apply[F[_]](implicit F: Transactor[F]): Transactor[F] = F
 
   /**
     * Creates a Transactor from a factory of databases.
