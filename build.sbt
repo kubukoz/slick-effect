@@ -33,7 +33,7 @@ val commonSettings = Seq(
     "org.typelevel" %% "cats-testkit" % "1.6.0" % Test,
     "org.typelevel" %% "cats-effect-laws" % "1.2.0" % Test,
     "org.scalatest" %% "scalatest" % "3.0.5" % Test,
-    "com.h2database" % "h2" % "1.4.197" % Test
+    "com.h2database" % "h2" % "1.4.198" % Test
   ) ++ compilerPlugins
 )
 
