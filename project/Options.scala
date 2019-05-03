@@ -4,10 +4,8 @@ object Options {
 
   //from https://tpolecat.github.io/2017/04/25/scalac-flags.html
   val addAll = {
-    val scala_2_11Options = Seq(
+    val scala_2_11Options = Set(
       "-deprecation", // Emit warning and location for usages of deprecated APIs.
-      "-encoding",
-      "utf-8", // Specify character encoding used by source files.
       "-explaintypes", // Explain type errors in more detail.
       "-feature", // Emit warning and location for usages of features that should be imported explicitly.
       "-language:existentials", // Existential types (besides wildcard types) can be written and inferred
@@ -44,7 +42,7 @@ object Options {
       "-Ywarn-value-discard" // Warn when non-Unit expression results are unused.
     )
 
-    val scala_2_12Options = scala_2_11Options ++ Seq (
+    val scala_2_12Options = scala_2_11Options ++ Set(
       "-Xlint:constant", // Evaluation of a constant arithmetic expression results in an error.
       "-Ywarn-extra-implicit", // Warn when more than one implicit parameter section is defined.
       "-Ywarn-unused:implicits", // Warn if an implicit parameter is unused.
@@ -55,6 +53,28 @@ object Options {
       "-Ywarn-unused:privates", // Warn if a private member is unused.
     )
 
-    scalacOptions ++= (if(scalaVersion.value.startsWith("2.11")) scala_2_11Options else scala_2_12Options)
+    val scala_2_13Options = scala_2_12Options -- Set(
+      "-Xlint:by-name-right-associative",
+      "-Xlint:unsound-match",
+      "-Yno-adapted-args",
+      "-Ywarn-nullary-unit",
+      "-Ywarn-inaccessible",
+      "-Ypartial-unification",
+      "-Ywarn-infer-any",
+      "-Ywarn-nullary-override",
+      "-Ywarn-unused:params",
+      "-Xlint:type-parameter-shadow",
+      "-Xfuture",
+      "-deprecation"
+    ) ++ List("-Xlint:deprecation")
+
+    scalacOptions ++= (scalaVersion.value match {
+      case v if v.startsWith("2.11") => scala_2_11Options
+      case v if v.startsWith("2.12") => scala_2_12Options
+      case v if v.startsWith("2.13") => scala_2_13Options
+    }).toList ++ List(
+      "-encoding",
+      "utf-8", // Specify character encoding used by source files.
+    )
   }
 }
