@@ -5,7 +5,6 @@ import cats.effect.implicits._
 import cats.~>
 import slick.basic.{BasicBackend, BasicProfile, DatabaseConfig}
 import slick.dbio.DBIO
-import cats.implicits._
 
 trait Transactor[F[_]] {
   def transact[A](dbio: DBIO[A]): F[A] = transactK(dbio)

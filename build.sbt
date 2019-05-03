@@ -1,5 +1,6 @@
-val Scala_2_11 = "2.11.11"
+val Scala_2_11 = "2.11.12"
 val Scala_2_12 = "2.12.8"
+val Scala_2_13 = "2.13.0-RC1"
 
 inThisBuild(
   List(
@@ -17,7 +18,6 @@ inThisBuild(
   ))
 
 val compilerPlugins = List(
-  compilerPlugin("org.scalamacros" % "paradise" % "2.1.1").cross(CrossVersion.full),
   compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.10")
 )
 
@@ -25,14 +25,14 @@ val commonSettings = Seq(
   scalaVersion := "2.11.11",
   Options.addAll,
   fork in Test := true,
-  crossScalaVersions := Seq(Scala_2_11, Scala_2_12),
+  crossScalaVersions := Seq(Scala_2_11, Scala_2_12, Scala_2_13),
   name := "slick-effect",
   libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick" % "3.3.0",
-    "org.typelevel" %% "cats-effect" % "1.3.0",
-    "org.typelevel" %% "cats-testkit" % "1.6.0" % Test,
-    "org.typelevel" %% "cats-effect-laws" % "1.3.0" % Test,
-    "org.scalatest" %% "scalatest" % "3.0.7" % Test,
+    "com.typesafe.slick" %% "slick" % "3.4.0-SNAPSHOT",
+    "org.typelevel" %% "cats-effect" % "2.0.0-M1",
+    "org.typelevel" %% "cats-testkit" % "2.0.0-M1" % Test,
+    "org.typelevel" %% "cats-effect-laws" % "2.0.0-M1" % Test,
+    "org.scalatest" %% "scalatest" % "3.0.8-RC2" % Test,
     "com.h2database" % "h2" % "1.4.199" % Test
   ) ++ compilerPlugins
 )
