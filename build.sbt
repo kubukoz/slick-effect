@@ -28,7 +28,7 @@ val commonSettings = Seq(
   crossScalaVersions := Seq(Scala_2_11, Scala_2_12),
   name := "slick-effect",
   libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick" % "3.3.1",
+    "com.typesafe.slick" %% "slick" % "3.3.2",
     "org.typelevel" %% "cats-effect" % "1.3.0",
     "org.typelevel" %% "cats-testkit" % "1.6.1" % Test,
     "org.typelevel" %% "cats-effect-laws" % "1.3.0" % Test,
