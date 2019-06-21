@@ -66,7 +66,7 @@ object Options {
       "-Xlint:type-parameter-shadow",
       "-Xfuture",
       "-deprecation"
-    ) ++ List("-Xlint:deprecation")
+    ) ++ List("-Xlint:deprecation", "-Ymacro-annotations")
 
     scalacOptions ++= (scalaVersion.value match {
       case v if v.startsWith("2.11") => scala_2_11Options
