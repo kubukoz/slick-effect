@@ -16,8 +16,8 @@ private[slickeffect] class DBIOAsync(implicit ec: ExecutionContext) extends Asyn
     val promise = Promise[A]()
 
     k {
-      case Right(a) => promise.success(a)
-      case Left(t)  => promise.failure(t)
+      case Right(a) => val _ = promise.success(a)
+      case Left(t)  => val _ = promise.failure(t)
     }
 
     DBIO.from(promise.future)
@@ -29,8 +29,8 @@ private[slickeffect] class DBIOAsync(implicit ec: ExecutionContext) extends Asyn
     val promise = Promise[A]()
 
     k {
-      case Right(a) => promise.success(a)
-      case Left(t)  => promise.failure(t)
+      case Right(a) => val _ = promise.success(a)
+      case Left(t)  => val _ = promise.failure(t)
     } >> DBIO.from(promise.future)
   }
 

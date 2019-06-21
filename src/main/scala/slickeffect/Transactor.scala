@@ -1,11 +1,10 @@
 package slickeffect
 
 import cats.effect._
-import cats.effect.implicits._
 import cats.~>
 import slick.basic.{BasicBackend, BasicProfile, DatabaseConfig}
 import slick.dbio.DBIO
-import cats.implicits._
+import slickeffect.internal.FromFuture
 
 trait Transactor[F[_]] {
   def transact[A](dbio: DBIO[A]): F[A] = transactK(dbio)
@@ -26,10 +25,10 @@ object Transactor {
   def fromDatabase[F[_]: Async: ContextShift](
     dbF: F[BasicBackend#DatabaseDef]
   ): Resource[F, Transactor[F]] =
-    Resource.make(dbF)(db => IO.fromFuture(IO(db.shutdown)).to[F]).map { db =>
+    Resource.make(dbF)(db => FromFuture[F].fromFuture(Sync[F].delay(db.shutdown))).map { db =>
       liftK {
         λ[DBIO ~> F] { dbio =>
-          IO.fromFuture(IO(db.run(dbio))).to[F].guarantee(ContextShift[F].shift)
+          FromFuture[F].fromFuture(Sync[F].delay(db.run(dbio)))
         }
       }
     }

@@ -1,7 +1,8 @@
 package slickeffect
 
 import cats.effect.{ContextShift, IO}
-import org.scalatest.{AsyncWordSpec, Matchers}
+import org.scalatest.Matchers
+import org.scalatest.wordspec.AsyncWordSpec
 import slick.dbio.DBIO
 import slick.jdbc.{H2Profile, JdbcProfile}
 

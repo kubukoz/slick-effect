@@ -27,7 +27,7 @@ jobs:
   include:
   # stage="test" if no stage is specified
   - script:
-    - sbt +test:compile +test
+    - sbt +test:compile +test +mimaReportBinaryIssues
   # run ci-release only if previous stages passed
   - stage: release
     script: sbt ci-release
