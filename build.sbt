@@ -47,6 +47,5 @@ val commonSettings = Seq(
 val core       = project.settings(commonSettings, name := "slick-effect")
 val transactor = project.settings(commonSettings, name := "slick-effect-transactor")
 
-val root = project
-  .in(file("."))
-  .aggregate(core, transactor)
+val root =
+  project.in(file(".")).settings(publishArtifact := false, scalaVersion := Scala_2_11).aggregate(core, transactor)
