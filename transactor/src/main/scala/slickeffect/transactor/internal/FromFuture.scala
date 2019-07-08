@@ -1,4 +1,4 @@
-package slickeffect.internal
+package slickeffect.transactor.internal
 
 import cats.ApplicativeError
 import cats.effect.{Async, ContextShift}

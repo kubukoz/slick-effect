@@ -23,7 +23,7 @@ inThisBuild(
 def compilerPlugins(scalaVersion: String) = {
   val paradise =
     if (below213(scalaVersion))
-      List(compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full))
+      List(compilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full))
     else Nil
 
   List(compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")) ++ paradise
@@ -32,13 +32,13 @@ def compilerPlugins(scalaVersion: String) = {
 def below213(scalaVersion: String) = !scalaVersion.startsWith("2.13")
 
 val commonSettings = Seq(
-  scalaVersion := "2.11.11",
+  scalaVersion := Scala_2_11,
   Options.addAll,
   fork in Test := true,
   crossScalaVersions := Seq(Scala_2_11, Scala_2_12, Scala_2_13),
-  name := "slick-effect",
-  mimaPreviousArtifacts := (if (below213(scalaVersion.value)) Set(organization.value %% name.value % "0.1.0")
-                            else Set.empty),
+  name ~= ("slick-effect-" + _),
+  //todo uncomment after 2.13 release
+  mimaPreviousArtifacts := Set.empty/*(Set(organization.value %% name.value % "0.1.0"))*/,
   libraryDependencies ++= Seq(
     "com.typesafe.slick"   %% "slick"            % "3.3.2",
     "com.github.mpilquist" %% "simulacrum"       % "0.19.0",
@@ -50,4 +50,12 @@ val commonSettings = Seq(
   ) ++ compilerPlugins(scalaVersion.value)
 )
 
-val core = project.in(file(".")).settings(commonSettings)
+val core       = project.settings(commonSettings)
+val transactor = project.settings(commonSettings)
+
+val root = project
+  .in(file("."))
+  .settings(
+    publishArtifact := false
+  )
+  .aggregate(core, transactor)

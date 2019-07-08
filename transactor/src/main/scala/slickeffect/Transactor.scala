@@ -4,7 +4,7 @@ import cats.effect._
 import cats.~>
 import slick.basic.{BasicBackend, BasicProfile, DatabaseConfig}
 import slick.dbio.DBIO
-import slickeffect.internal.FromFuture
+import slickeffect.transactor.internal.FromFuture
 
 trait Transactor[F[_]] {
   def transact[A](dbio: DBIO[A]): F[A] = transactK(dbio)
@@ -20,7 +20,7 @@ object Transactor {
   /**
     * Creates a Transactor from a factory of databases.
     * This transactor doesn't actually run the DBIO actions in transactions by default.
-    * If you want transactions, see [[slickeffect.config.transactionally]] and its Scaladoc.
+    * If you want transactions, see [[slickeffect.transactor.config.transactionally]] and its Scaladoc.
     */
   def fromDatabase[F[_]: Async: ContextShift](
     dbF: F[BasicBackend#DatabaseDef]
