@@ -20,34 +20,33 @@ inThisBuild(
   )
 )
 
-def compilerPlugins(scalaVersion: String) = {
-  val paradise =
-    if (below213(scalaVersion))
-      List(compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full))
-    else Nil
-
-  List(compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")) ++ paradise
-}
+def compilerPlugins(scalaVersion: String) =
+  List(compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"))
 
 def below213(scalaVersion: String) = !scalaVersion.startsWith("2.13")
 
+def catsEffectVersion(scalaVersion: String) = if (below213(scalaVersion)) "1.3.1" else "2.0.0-M4"
+
 val commonSettings = Seq(
-  scalaVersion := "2.11.11",
+  scalaVersion := Scala_2_11,
   Options.addAll,
   fork in Test := true,
   crossScalaVersions := Seq(Scala_2_11, Scala_2_12, Scala_2_13),
-  name := "slick-effect",
-  mimaPreviousArtifacts := (if (below213(scalaVersion.value)) Set(organization.value %% name.value % "0.1.0")
-                            else Set.empty),
+  //todo uncomment after 2.13 release
+  mimaPreviousArtifacts := Set.empty /*(Set(organization.value %% name.value % "0.1.0"))*/,
   libraryDependencies ++= Seq(
-    "com.typesafe.slick"   %% "slick"            % "3.3.2",
-    "com.github.mpilquist" %% "simulacrum"       % "0.19.0",
-    "org.typelevel"        %% "cats-effect"      % "2.0.0-M4",
-    "org.typelevel"        %% "cats-testkit"     % "2.0.0-M4" % Test,
-    "org.typelevel"        %% "cats-effect-laws" % "2.0.0-M4" % Test,
-    "org.scalatest"        %% "scalatest"        % "3.0.8" % Test,
-    "com.h2database"       % "h2"                % "1.4.199" % Test
+    "com.typesafe.slick" %% "slick"            % "3.3.2",
+    "org.typelevel"      %% "cats-effect"      % catsEffectVersion(scalaVersion.value),
+    "org.typelevel"      %% "cats-testkit"     % "2.0.0-M4" % Test,
+    "org.typelevel"      %% "cats-effect-laws" % catsEffectVersion(scalaVersion.value) % Test,
+    "org.scalatest"      %% "scalatest"        % "3.0.8" % Test,
+    "com.h2database"     % "h2"                % "1.4.199" % Test
   ) ++ compilerPlugins(scalaVersion.value)
 )
 
-val core = project.in(file(".")).settings(commonSettings)
+val core       = project.settings(commonSettings, name := "slick-effect")
+val transactor = project.settings(commonSettings, name := "slick-effect-transactor")
+
+val root = project
+  .in(file("."))
+  .aggregate(core, transactor)

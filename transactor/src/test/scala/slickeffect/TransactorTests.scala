@@ -5,6 +5,7 @@ import org.scalatest.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
 import slick.dbio.DBIO
 import slick.jdbc.{H2Profile, JdbcProfile}
+import slickeffect.transactor.config
 
 import scala.concurrent.ExecutionContext
 
@@ -22,7 +23,7 @@ class TransactorTests extends AsyncWordSpec with Matchers {
 
       Transactor
         .fromDatabase[IO](IO(profile.backend.Database.forURL("jdbc:h2:mem:")))
-        .map(_.configure(slickeffect.config.transactionally))
+        .map(_.configure(config.transactionally))
         .use(_.transact(action))
         .map(_ shouldBe 1)
     }.unsafeToFuture()

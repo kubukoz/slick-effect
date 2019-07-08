@@ -1,4 +1,5 @@
-package slickeffect
+package slickeffect.transactor
+
 import cats.~>
 import slick.dbio.DBIO
 import slick.jdbc.JdbcProfile
