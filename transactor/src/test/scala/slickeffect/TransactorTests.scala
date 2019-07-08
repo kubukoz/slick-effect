@@ -3,7 +3,6 @@ package slickeffect
 import cats.effect.{ContextShift, IO}
 import org.scalatest.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
-import slick.basic.BasicBackend
 import slick.dbio.DBIO
 import slick.jdbc.{H2Profile, JdbcProfile}
 import slickeffect.transactor.config
