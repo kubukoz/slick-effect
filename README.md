@@ -9,19 +9,19 @@ Compatibility tools for Slick + cats-effect. Released for Scala 2.12 and 2.11.
 Add the dependency. SBT:
 
 ```sbt
-"com.kubukoz" %% "slick-effect-core" % "0.2.0"
+"com.kubukoz" %% "slick-effect-core" % "0.3.0"
 ```
 
 Ammonite:
 
 ```
-$ivy.`com.kubukoz::slick-effect-core:0.2.0`
+$ivy.`com.kubukoz::slick-effect-core:0.3.0`
 ```
 
 Coursier:
 
 ```
-com.kubukoz::slick-effect-core:0.2.0
+com.kubukoz::slick-effect-core:0.3.0
 ```
 
 ### Instances
