@@ -37,7 +37,7 @@ val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "com.typesafe.slick" %% "slick"            % "3.3.2",
     "org.typelevel"      %% "cats-effect"      % catsEffectVersion(scalaVersion.value),
-    "org.typelevel"      %% "cats-testkit"     % "2.0.0-M4" % Test,
+    "org.typelevel"      %% "cats-testkit"     % "2.0.0-RC1" % Test,
     "org.typelevel"      %% "cats-effect-laws" % catsEffectVersion(scalaVersion.value) % Test,
     "org.scalatest"      %% "scalatest"        % "3.0.8" % Test,
     "com.h2database"     % "h2"                % "1.4.199" % Test
