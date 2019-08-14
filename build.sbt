@@ -25,7 +25,7 @@ def compilerPlugins(scalaVersion: String) =
 
 def below213(scalaVersion: String) = !scalaVersion.startsWith("2.13")
 
-def catsEffectVersion(scalaVersion: String) = if (below213(scalaVersion)) "1.3.1" else "2.0.0-M4"
+def catsEffectVersion(scalaVersion: String) = if (below213(scalaVersion)) "1.3.1" else "2.0.0-RC1"
 
 val commonSettings = Seq(
   scalaVersion := Scala_2_11,
