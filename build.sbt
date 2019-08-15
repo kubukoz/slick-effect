@@ -48,4 +48,7 @@ val core       = project.settings(commonSettings, name := "slick-effect")
 val transactor = project.settings(commonSettings, name := "slick-effect-transactor")
 
 val root =
-  project.in(file(".")).settings(publishArtifact := false, scalaVersion := Scala_2_11).aggregate(core, transactor)
+  project
+    .in(file("."))
+    .settings(mimaPreviousArtifacts := Set.empty, publishArtifact := false, scalaVersion := Scala_2_11)
+    .aggregate(core, transactor)
