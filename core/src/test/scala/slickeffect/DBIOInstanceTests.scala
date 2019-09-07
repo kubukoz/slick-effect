@@ -5,7 +5,6 @@ import cats.effect.laws.discipline.AsyncTests
 import cats.kernel.Eq
 import cats.laws.discipline.SemigroupalTests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Gen}
 import slick.dbio.DBIO
 import slick.jdbc.H2Profile
@@ -14,8 +13,11 @@ import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.util.Try
+import org.typelevel.discipline.scalatest.Discipline
+import cats.implicits._
+import org.scalatest.wordspec.AnyWordSpec
 
-class DBIOInstanceTests extends CatsSuite {
+class DBIOInstanceTests extends AnyWordSpec with Discipline {
   import slickeffect.implicits._
 
   private val timeout = 3.seconds
@@ -42,7 +44,8 @@ class DBIOInstanceTests extends CatsSuite {
 
       def eqv(fx: DBIO[A], fy: DBIO[A]): Boolean = {
         Either.fromTry(Try(Await.result(db.run(fx), timeout))) === Either.fromTry(
-          Try(Await.result(db.run(fy), timeout)))
+          Try(Await.result(db.run(fy), timeout))
+        )
       }
     }
 
