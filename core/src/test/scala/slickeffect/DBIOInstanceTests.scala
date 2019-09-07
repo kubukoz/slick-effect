@@ -13,11 +13,9 @@ import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.util.Try
-import org.typelevel.discipline.scalatest.Discipline
-import cats.implicits._
-import org.scalatest.wordspec.AnyWordSpec
+import cats.tests.CatsSuite
 
-class DBIOInstanceTests extends AnyWordSpec with Discipline {
+class DBIOInstanceTests extends CatsSuite {
   import slickeffect.implicits._
 
   private val timeout = 3.seconds
