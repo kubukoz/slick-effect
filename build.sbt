@@ -25,8 +25,8 @@ def compilerPlugins(scalaVersion: String) =
 
 def below213(scalaVersion: String) = !scalaVersion.startsWith("2.13")
 
-def catsEffectVersion(scalaVersion: String) = if (below213(scalaVersion)) "1.4.0" else "2.0.0-RC2"
-def catsVersion(scalaVersion: String)       = if (below213(scalaVersion)) "2.0.0" else "2.0.0-RC2"
+def catsEffectVersion(scalaVersion: String) = if (below213(scalaVersion)) "2.0.0" else "2.0.0-RC2"
+def catsVersion(scalaVersion: String)       = if (below213(scalaVersion)) "1.6.1" else "2.0.0-RC2"
 
 def scalatest(scalaVersion: String) =
   if (below213(scalaVersion)) Nil
