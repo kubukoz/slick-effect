@@ -1,5 +1,5 @@
 val Scala_2_11 = "2.11.12"
-val Scala_2_12 = "2.12.8"
+val Scala_2_12 = "2.12.10"
 val Scala_2_13 = "2.13.0"
 
 inThisBuild(
@@ -23,15 +23,6 @@ inThisBuild(
 def compilerPlugins(scalaVersion: String) =
   List(compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"))
 
-def below213(scalaVersion: String) = !scalaVersion.startsWith("2.13")
-
-def catsEffectVersion(scalaVersion: String) = if (below213(scalaVersion)) "2.0.0" else "2.0.0-RC2"
-def catsVersion(scalaVersion: String)       = if (below213(scalaVersion)) "1.6.1" else "2.0.0-RC2"
-
-def scalatest(scalaVersion: String) =
-  if (below213(scalaVersion)) Nil
-  else List("org.typelevel" %% "cats-testkit-scalatest" % "1.0.0-M1")
-
 val commonSettings = Seq(
   scalaVersion := Scala_2_11,
   Options.addAll,
@@ -40,12 +31,13 @@ val commonSettings = Seq(
   //todo uncomment after 2.13 release
   mimaPreviousArtifacts := Set.empty /*(Set(organization.value %% name.value % "0.1.0"))*/,
   libraryDependencies ++= Seq(
-    "com.typesafe.slick"                   %% "slick" % "3.3.2",
-    "org.typelevel"                        %% "cats-effect" % catsEffectVersion(scalaVersion.value),
-    "org.typelevel"                        %% "cats-testkit" % catsVersion(scalaVersion.value) % Test,
-    "org.typelevel"                        %% "cats-effect-laws" % catsEffectVersion(scalaVersion.value) % Test,
-    "com.h2database"                       % "h2" % "1.4.199" % Test
-  ) ++ scalatest(scalaVersion.value).map(_ % Test) ++ compilerPlugins(scalaVersion.value)
+    "com.typesafe.slick" %% "slick"                  % "3.3.2",
+    "org.typelevel"      %% "cats-effect"            % "2.0.0",
+    "org.typelevel"      %% "cats-testkit"           % "2.0.0" % Test,
+    "org.typelevel"      %% "cats-effect-laws"       % "2.0.0" % Test,
+    "com.h2database"     % "h2"                      % "1.4.199" % Test,
+    "org.typelevel"      %% "cats-testkit-scalatest" % "1.0.0-M2" % Test
+  ) ++ compilerPlugins(scalaVersion.value)
 )
 
 val core       = project.settings(commonSettings, name := "slick-effect")
