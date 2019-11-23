@@ -35,7 +35,7 @@ val commonSettings = Seq(
     "org.typelevel"      %% "cats-effect"            % "2.0.0",
     "org.typelevel"      %% "cats-testkit"           % "2.0.0" % Test,
     "org.typelevel"      %% "cats-effect-laws"       % "2.0.0" % Test,
-    "com.h2database"     % "h2"                      % "1.4.199" % Test,
+    "com.h2database"     % "h2"                      % "1.4.200" % Test,
     "org.typelevel"      %% "cats-testkit-scalatest" % "1.0.0-RC1" % Test
   ) ++ compilerPlugins(scalaVersion.value)
 )
