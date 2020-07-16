@@ -9,19 +9,19 @@ Compatibility tools for Slick + cats-effect. Released for Scala 2.12 and 2.11.
 Add the dependency. SBT:
 
 ```sbt
-"com.kubukoz" %% "slick-effect" % "0.3.0-M3"
+"com.kubukoz" %% "slick-effect" % "0.3.0"
 ```
 
 Ammonite:
 
 ```
-$ivy.`com.kubukoz::slick-effect:0.3.0-M3`
+$ivy.`com.kubukoz::slick-effect:0.3.0`
 ```
 
 Coursier:
 
 ```
-com.kubukoz::slick-effect:0.3.0-M3
+com.kubukoz::slick-effect:0.3.0
 ```
 
 ### Instances
@@ -39,12 +39,14 @@ scala> Async[slick.dbio.DBIO]
 res0: Async[slick.dbio.package.DBIO] = slickeffect.DBIOAsync@434c179e
 ```
 
-### Transactor (from 0.3.0-M2 onwards)
+### [EXPERIMENTAL] Transactor (from 0.3.0-M2 onwards)
 
-You can use slick-effect to run your DBIOs. Add a dependency on the transactor module:
+You can use slick-effect to run your DBIOs. This functionality is experimental, and the API may change.
+
+If you still want to use it, add a dependency on the transactor module:
 
 ```scala
-"com.kubukoz" %% "slick-effect-transactor" % "0.3.0-M2"
+"com.kubukoz" %% "slick-effect-transactor" % "0.3.0"
 ```
 
 Create a transactor:
