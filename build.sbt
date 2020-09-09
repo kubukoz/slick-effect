@@ -31,7 +31,7 @@ val commonSettings = Seq(
   //todo uncomment after 2.13 release
   mimaPreviousArtifacts := Set.empty /*(Set(organization.value %% name.value % "0.1.0"))*/,
   libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick"                  % "3.3.2",
+    "com.typesafe.slick" %% "slick"                  % "3.3.3",
     "org.typelevel"      %% "cats-effect"            % "2.0.0",
     "org.typelevel"      %% "cats-testkit"           % "2.0.0" % Test,
     "org.typelevel"      %% "cats-effect-laws"       % "2.0.0" % Test,
