@@ -21,18 +21,18 @@ object Transactor {
     * This transactor doesn't actually run the DBIO actions in transactions by default.
     * If you want transactions, see [[slickeffect.transactor.config.transactionally]] and its Scaladoc.
     */
-  def fromDatabase[F[_]: Async: ContextShift](
+  def fromDatabase[F[_]: Async](
     dbF: F[BasicBackend#DatabaseDef]
   ): Resource[F, Transactor[F]] =
-    Resource.make(dbF)(db => Async.fromFuture(Sync[F].delay(db.shutdown))).map { db =>
+    Resource.make(dbF)(db => Async[F].fromFuture(Sync[F].delay(db.shutdown))).map { db =>
       liftK {
         λ[DBIO ~> F] { dbio =>
-          Async.fromFuture(Sync[F].delay(db.run(dbio)))
+          Async[F].fromFuture(Sync[F].delay(db.run(dbio)))
         }
       }
     }
 
-  def fromDatabaseConfig[F[_]: Async: ContextShift](
+  def fromDatabaseConfig[F[_]: Async](
     dbConfig: DatabaseConfig[_ <: BasicProfile]
   ): Resource[F, Transactor[F]] =
     fromDatabase(Sync[F].delay(dbConfig.db))
