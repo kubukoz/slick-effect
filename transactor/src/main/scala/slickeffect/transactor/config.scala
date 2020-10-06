@@ -5,6 +5,7 @@ import slick.dbio.DBIO
 import slick.jdbc.JdbcProfile
 
 object config {
+
   /**
     * Usage:
     *
