@@ -1,7 +1,6 @@
 package slickeffect
 
 import cats.data.EitherT
-import cats.effect.laws.discipline.AsyncTests
 import cats.kernel.Eq
 import cats.laws.discipline.SemigroupalTests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
@@ -14,6 +13,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.util.Try
 import cats.tests.CatsSuite
+import cats.effect.laws.SyncTests
+import cats.effect.testkit.SyncTypeGenerators._
+import org.scalacheck.Prop
 
 class DBIOInstanceTests extends CatsSuite {
   import slickeffect.implicits._
@@ -47,7 +49,9 @@ class DBIOInstanceTests extends CatsSuite {
       }
     }
 
+  implicit val dbioRun: DBIO[Boolean] => Prop = dbio => Await.result(db.run(dbio.map(Prop.propBoolean)), timeout)
+
   implicit def eithertDBIOEq[E: Eq, T: Eq]: Eq[EitherT[DBIO, E, T]] = Eq.by(_.value)
 
-  checkAll("Async[DBIO]", AsyncTests[DBIO].async[Int, Int, Int])
+  checkAll("Sync[DBIO]", SyncTests[DBIO].sync[Int, Int, Int])
 }

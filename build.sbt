@@ -1,6 +1,5 @@
-val Scala_2_11 = "2.11.12"
-val Scala_2_12 = "2.12.10"
-val Scala_2_13 = "2.13.0"
+val Scala_2_12 = "2.12.12"
+val Scala_2_13 = "2.13.3"
 
 inThisBuild(
   List(
@@ -21,22 +20,22 @@ inThisBuild(
 )
 
 def compilerPlugins(scalaVersion: String) =
-  List(compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"))
+  List(compilerPlugin("org.typelevel" % "kind-projector" % "0.11.0" cross CrossVersion.full))
 
 val commonSettings = Seq(
-  scalaVersion := Scala_2_11,
+  scalaVersion := Scala_2_12,
   Options.addAll,
   fork in Test := true,
-  crossScalaVersions := Seq(Scala_2_11, Scala_2_12, Scala_2_13),
-  //todo uncomment after 2.13 release
-  mimaPreviousArtifacts := Set.empty /*(Set(organization.value %% name.value % "0.1.0"))*/,
+  crossScalaVersions := Seq(Scala_2_12, Scala_2_13),
+  mimaPreviousArtifacts := (Set(organization.value %% name.value % "0.1.0")),
   libraryDependencies ++= Seq(
     "com.typesafe.slick" %% "slick"                  % "3.3.3",
-    "org.typelevel"      %% "cats-effect"            % "2.0.0",
+    "org.typelevel"      %% "cats-effect"            % "3.0.0-M1",
     "org.typelevel"      %% "cats-testkit"           % "2.0.0" % Test,
-    "org.typelevel"      %% "cats-effect-laws"       % "2.0.0" % Test,
+    "org.typelevel"      %% "cats-effect-laws"       % "3.0.0-M1" % Test,
+    "org.typelevel"      %% "cats-effect-testkit"    % "3.0.0-M1" % Test,
     "com.h2database"     % "h2"                      % "1.4.200" % Test,
-    "org.typelevel"      %% "cats-testkit-scalatest" % "1.0.0-RC1" % Test
+    "org.typelevel"      %% "cats-testkit-scalatest" % "1.0.0" % Test
   ) ++ compilerPlugins(scalaVersion.value)
 )
 
@@ -46,5 +45,5 @@ val transactor = project.settings(commonSettings, name := "slick-effect-transact
 val root =
   project
     .in(file("."))
-    .settings(mimaPreviousArtifacts := Set.empty, publishArtifact := false, scalaVersion := Scala_2_11)
+    .settings(mimaPreviousArtifacts := Set.empty, publishArtifact := false, scalaVersion := Scala_2_12)
     .aggregate(core, transactor)

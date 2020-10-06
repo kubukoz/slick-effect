@@ -1,6 +1,6 @@
 package slickeffect
 
-import cats.effect.Async
+import cats.effect.Sync
 import slick.dbio.DBIO
 
 import scala.concurrent.ExecutionContext
@@ -8,5 +8,5 @@ import scala.concurrent.ExecutionContext
 object implicits extends DBIOInstances
 
 trait DBIOInstances {
-  implicit def dbioCatsEffectAsync(implicit ec: ExecutionContext): Async[DBIO] = new DBIOAsync()
+  implicit def dbioCatsEffectSync(implicit ec: ExecutionContext): Sync[DBIO] = new DBIOSync()
 }
