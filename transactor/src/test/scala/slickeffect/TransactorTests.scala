@@ -21,10 +21,10 @@ class TransactorTests extends AsyncWordSpec with Matchers {
         sql"select 1".as[Int].head
       }
 
-      Transactor
+      TransactorCov
         .fromDatabase[IO](IO(profile.backend.Database.forURL("jdbc:h2:mem:")))
-        .map(_.configure(config.transactionally))
-        .use(_.transact(action))
+        .map(_.configureK(config.transactionallyK))
+        .use(_.transactAction(action))
         .map(_ shouldBe 1)
     }.unsafeToFuture()(IORuntime.global)
   }
