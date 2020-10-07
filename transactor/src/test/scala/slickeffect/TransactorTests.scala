@@ -8,6 +8,8 @@ import slick.jdbc.{H2Profile, JdbcProfile}
 import slickeffect.transactor.config
 
 import cats.effect.unsafe.IORuntime
+import slick.dbio.NoStream
+import slick.dbio.Effect
 
 class TransactorTests extends AsyncWordSpec with Matchers {
 
@@ -21,10 +23,10 @@ class TransactorTests extends AsyncWordSpec with Matchers {
         sql"select 1".as[Int].head
       }
 
-      TransactorCov
+      Transactor
         .fromDatabase[IO](IO(profile.backend.Database.forURL("jdbc:h2:mem:")))
-        .map(_.configureK(config.transactionallyK))
-        .use(_.transactAction(action))
+        .map(_.configure(config.transactionally[NoStream, Effect.All]))
+        .use(_.transact(action))
         .map(_ shouldBe 1)
     }.unsafeToFuture()(IORuntime.global)
   }

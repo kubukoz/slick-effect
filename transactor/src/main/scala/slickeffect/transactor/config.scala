@@ -18,11 +18,7 @@ object config {
     *
     * def withTransactions: SlickTransactor[F] = xa.configure(transactionally)
     * */
-  def transactionally(implicit profile: JdbcProfile): DBIO ~> DBIO = {
-    λ[DBIO ~> DBIO](transactionallyK(profile)(_))
-  }
-
-  def transactionallyK[S <: NoStream, E <: Effect](
+  def transactionally[S <: NoStream, E <: Effect](
     implicit profile: JdbcProfile
   ): DBIOFunctionK[S, E, S, E with Effect.Transactional] = new DBIOFunctionK[S, E, S, E with Effect.Transactional] {
 
