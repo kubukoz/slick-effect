@@ -27,7 +27,8 @@ val commonSettings = Seq(
   Options.addAll,
   fork in Test := true,
   crossScalaVersions := Seq(Scala_2_12, Scala_2_13),
-  mimaPreviousArtifacts := (Set(organization.value %% name.value % "0.1.0")),
+  //uncomment after release for CE3
+  mimaPreviousArtifacts := (Set( /* organization.value %% name.value % "0.1.0" */ )),
   libraryDependencies ++= Seq(
     "com.typesafe.slick" %% "slick"                  % "3.3.3",
     "org.typelevel"      %% "cats-effect"            % "3.0.0-M1",
