@@ -7,7 +7,6 @@ import slickeffect.implicits._
 import slickeffect.catsio.implicits._
 import cats.tagless.implicits._
 import cats.tagless.autoFunctorK
-import slick.dbio.DBIO
 import slickeffect.Transactor
 import cats.tagless.finalAlg
 import slick.jdbc.JdbcBackend.Database
@@ -16,6 +15,7 @@ import scala.concurrent.ExecutionContext
 import cats.effect.kernel.Sync
 import cats.syntax.all._
 import cats.effect.LiftIO
+import slick.jdbc.PostgresProfile.api._
 
 object Demo extends IOApp.Simple {
   implicit val rt = runtime
@@ -36,7 +36,9 @@ object Demo extends IOApp.Simple {
                       )
                     )
     } yield {
-      implicit val xa = transactor
+
+      implicit val xa =
+        transactor.configure(slickeffect.transactor.config.transactionally)
 
       new Application[IO]
     }
@@ -89,8 +91,6 @@ object Repository {
 
   def instance(implicit ec: ExecutionContext): Repository[DBIO] =
     new Repository[DBIO] {
-      import slick.jdbc.PostgresProfile.api.{DBIO => _, _}
-
       val findAll: DBIO[List[String]] =
         sql"select 'a'".as[String].map(_.toList)
     }
