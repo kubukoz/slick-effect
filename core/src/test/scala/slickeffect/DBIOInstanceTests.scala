@@ -4,7 +4,8 @@ import cats.data.EitherT
 import cats.kernel.Eq
 import cats.laws.discipline.SemigroupalTests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 import slick.dbio.DBIO
 import slick.jdbc.H2Profile
 
@@ -21,7 +22,7 @@ class DBIOInstanceTests extends CatsSuite {
   import slickeffect.implicits._
 
   private val timeout = 3.seconds
-  val db              = H2Profile.backend.Database.forURL("jdbc:h2:mem:")
+  val db = H2Profile.backend.Database.forURL("jdbc:h2:mem:")
 
   implicit val throwableEq: Eq[Throwable] = Eq.by(_.getMessage)
 
@@ -42,16 +43,19 @@ class DBIOInstanceTests extends CatsSuite {
   implicit def dbioEq[A: Eq]: Eq[DBIO[A]] =
     new Eq[DBIO[A]] {
 
-      def eqv(fx: DBIO[A], fy: DBIO[A]): Boolean = {
-        Either.fromTry(Try(Await.result(db.run(fx), timeout))) === Either.fromTry(
-          Try(Await.result(db.run(fy), timeout))
-        )
-      }
+      def eqv(fx: DBIO[A], fy: DBIO[A]): Boolean =
+        Either.fromTry(Try(Await.result(db.run(fx), timeout))) === Either
+          .fromTry(
+            Try(Await.result(db.run(fy), timeout))
+          )
+
     }
 
-  implicit val dbioRun: DBIO[Boolean] => Prop = dbio => Await.result(db.run(dbio.map(Prop.propBoolean)), timeout)
+  implicit val dbioRun: DBIO[Boolean] => Prop = dbio =>
+    Await.result(db.run(dbio.map(Prop.propBoolean)), timeout)
 
-  implicit def eithertDBIOEq[E: Eq, T: Eq]: Eq[EitherT[DBIO, E, T]] = Eq.by(_.value)
+  implicit def eithertDBIOEq[E: Eq, T: Eq]: Eq[EitherT[DBIO, E, T]] =
+    Eq.by(_.value)
 
   checkAll("Sync[DBIO]", SyncTests[DBIO].sync[Int, Int, Int])
 }

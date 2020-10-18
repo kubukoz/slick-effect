@@ -1,10 +1,11 @@
 package slickeffect
 
-import cats.effect.{IO}
+import cats.effect.IO
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
 import slick.dbio.DBIO
-import slick.jdbc.{H2Profile, JdbcProfile}
+import slick.jdbc.H2Profile
+import slick.jdbc.JdbcProfile
 import slickeffect.transactor.config
 
 import cats.effect.unsafe.IORuntime

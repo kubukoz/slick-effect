@@ -1,13 +1,21 @@
-import cats.effect.unsafe.UnsafeRun
 import slick.dbio.DBIO
 import cats.~>
 import scala.concurrent.ExecutionContext
+import cats.effect.kernel.Async
+import cats.effect.std.Dispatcher
+import cats.effect.kernel.Resource
+import cats.effect.kernel.syntax.all._
+import cats.syntax.all._
 
 package object slickeffect {
 
-  def liftToDBIO[F[_]: UnsafeRun](implicit ec: ExecutionContext): F ~> DBIO = new (F ~> DBIO) {
+  def liftEffectToDBIO[F[_]: Async]: Resource[F, F ~> DBIO] =
+    (Dispatcher[F], Async[F].executionContext.toResource)
+      .mapN(liftEffectUsingDispatcher)
 
-    def apply[A](fa: F[A]): DBIO[A] =
-      DBIO.successful(()).flatMap(_ => DBIO.from(UnsafeRun[F].unsafeRunFutureCancelable(fa)._1))
-  }
+  def liftEffectUsingDispatcher[F[_]](
+    dispatcher: Dispatcher[F],
+    compute: ExecutionContext
+  ): F ~> DBIO = new LiftEffectToDBIO[F](dispatcher, compute)
+
 }

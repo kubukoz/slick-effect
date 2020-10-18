@@ -1,6 +1,8 @@
 val Scala_2_12 = "2.12.12"
 val Scala_2_13 = "2.13.3"
 
+val catsEffectVersion = "3.0-d5a2213"
+
 inThisBuild(
   List(
     organization := "com.kubukoz",
@@ -20,7 +22,11 @@ inThisBuild(
 )
 
 def compilerPlugins(scalaVersion: String) =
-  List(compilerPlugin("org.typelevel" % "kind-projector" % "0.11.0" cross CrossVersion.full))
+  List(
+    compilerPlugin(
+      "org.typelevel" % "kind-projector" % "0.11.0" cross CrossVersion.full
+    )
+  )
 
 val commonSettings = Seq(
   scalaVersion := Scala_2_12,
@@ -28,23 +34,47 @@ val commonSettings = Seq(
   fork in Test := true,
   crossScalaVersions := Seq(Scala_2_12, Scala_2_13),
   //uncomment after release for CE3
-  mimaPreviousArtifacts := (Set( /* organization.value %% name.value % "0.1.0" */ )),
+  mimaPreviousArtifacts := (Set(
+    /* organization.value %% name.value % "0.1.0" */
+  )),
   libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick"                  % "3.3.3",
-    "org.typelevel"      %% "cats-effect"            % "3.0.0-M1",
-    "org.typelevel"      %% "cats-testkit"           % "2.0.0" % Test,
-    "org.typelevel"      %% "cats-effect-laws"       % "3.0.0-M1" % Test,
-    "org.typelevel"      %% "cats-effect-testkit"    % "3.0.0-M1" % Test,
-    "com.h2database"     % "h2"                      % "1.4.200" % Test,
-    "org.typelevel"      %% "cats-testkit-scalatest" % "1.0.0" % Test
+    "com.typesafe.slick" %% "slick" % "3.3.3",
+    "org.typelevel" %% "cats-effect-kernel" % catsEffectVersion,
+    "org.typelevel" %% "cats-effect-std" % catsEffectVersion,
+    "org.typelevel" %% "cats-core" % "2.2.0" % Test,
+    "org.typelevel" %% "cats-testkit" % "2.2.0" % Test,
+    "org.typelevel" %% "cats-effect-laws" % catsEffectVersion % Test,
+    "org.typelevel" %% "cats-effect-testkit" % catsEffectVersion % Test,
+    "com.h2database" % "h2" % "1.4.200" % Test,
+    "org.typelevel" %% "cats-testkit-scalatest" % "1.0.0" % Test
   ) ++ compilerPlugins(scalaVersion.value)
 )
 
-val core       = project.settings(commonSettings, name := "slick-effect")
-val transactor = project.settings(commonSettings, name := "slick-effect-transactor")
+val core = project.settings(commonSettings, name := "slick-effect")
+
+val catsio = project.settings(
+  commonSettings,
+  libraryDependencies ++= Seq(
+    "org.typelevel" %% "cats-effect" % catsEffectVersion
+  ),
+  name := "slick-effect-catsio"
+)
+
+val transactor =
+  project.settings(
+    commonSettings,
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-effect" % catsEffectVersion % Test
+    ),
+    name := "slick-effect-transactor"
+  )
 
 val root =
   project
     .in(file("."))
-    .settings(mimaPreviousArtifacts := Set.empty, publishArtifact := false, scalaVersion := Scala_2_12)
-    .aggregate(core, transactor)
+    .settings(
+      mimaPreviousArtifacts := Set.empty,
+      publishArtifact := false,
+      scalaVersion := Scala_2_12
+    )
+    .aggregate(core, catsio, transactor)
