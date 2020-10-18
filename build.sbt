@@ -69,6 +69,22 @@ val transactor =
     name := "slick-effect-transactor"
   )
 
+val examples = project
+  .settings(
+    commonSettings,
+    publishArtifact := false,
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-effect" % catsEffectVersion,
+      "org.typelevel" %% "cats-tagless-macros" % "0.11",
+      "org.postgresql" % "postgresql" % "42.2.18",
+      compilerPlugin(
+        "org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full
+      )
+    ),
+    mimaPreviousArtifacts := Set.empty
+  )
+  .dependsOn(core, catsio, transactor)
+
 val root =
   project
     .in(file("."))
@@ -77,4 +93,4 @@ val root =
       publishArtifact := false,
       scalaVersion := Scala_2_12
     )
-    .aggregate(core, catsio, transactor)
+    .aggregate(core, catsio, transactor, examples)
