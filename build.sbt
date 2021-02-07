@@ -1,7 +1,7 @@
-val Scala_2_12 = "2.12.12"
-val Scala_2_13 = "2.13.3"
+val Scala_2_12 = "2.12.13"
+val Scala_2_13 = "2.13.4"
 
-val catsEffectVersion = "3.0-d5a2213"
+val catsEffectVersion = "3.0.0-M5"
 
 inThisBuild(
   List(
@@ -24,7 +24,7 @@ inThisBuild(
 def compilerPlugins(scalaVersion: String) =
   List(
     compilerPlugin(
-      "org.typelevel" % "kind-projector" % "0.11.0" cross CrossVersion.full
+      "org.typelevel" % "kind-projector" % "0.11.3" cross CrossVersion.full
     )
   )
 

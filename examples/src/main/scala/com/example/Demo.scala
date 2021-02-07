@@ -1,21 +1,22 @@
 package com.example
 
-import cats.effect.kernel.Async
-import cats.effect.IOApp
-import cats.effect.IO
-import slickeffect.implicits._
-import slickeffect.catsio.implicits._
-import cats.tagless.implicits._
-import cats.tagless.autoFunctorK
-import slickeffect.Transactor
-import cats.tagless.finalAlg
-import slick.jdbc.JdbcBackend.Database
-import cats.~>
 import scala.concurrent.ExecutionContext
-import cats.effect.kernel.Sync
-import cats.syntax.all._
+
+import cats.FlatMap
+import cats.effect.IO
+import cats.effect.IOApp
 import cats.effect.LiftIO
+import cats.effect.kernel.Async
+import cats.syntax.all._
+import cats.tagless.autoFunctorK
+import cats.tagless.finalAlg
+import cats.tagless.implicits._
+import cats.~>
+import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.PostgresProfile.api._
+import slickeffect.Transactor
+import slickeffect.catsio.implicits._
+import slickeffect.implicits._
 
 object Demo extends IOApp.Simple {
   implicit val rt = runtime
@@ -56,6 +57,7 @@ class Application[F[_]: Async: Transactor](
   private val fClient = AsyncClient.instance[F]
   private implicit val dbioClient = fClient.mapK(fToDBIO)
   private implicit val repo = Repository.instance
+  private implicit val console = cats.effect.std.Console.make[DBIO]
 
   private val program = Program.instance[DBIO].mapK(Transactor[F].transactK)
 
@@ -69,7 +71,9 @@ trait Program[F[_]] {
 
 object Program {
 
-  def instance[F[_]: AsyncClient: Repository: Sync]: Program[F] =
+  def instance[
+    F[_]: AsyncClient: Repository: cats.effect.std.Console: FlatMap
+  ]: Program[F] =
     new Program[F] {
 
       val run: F[Unit] =
