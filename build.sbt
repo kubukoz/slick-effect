@@ -41,12 +41,12 @@ val commonSettings = Seq(
     "com.typesafe.slick" %% "slick" % "3.3.3",
     "org.typelevel" %% "cats-effect-kernel" % catsEffectVersion,
     "org.typelevel" %% "cats-effect-std" % catsEffectVersion,
-    "org.typelevel" %% "cats-core" % "2.2.0" % Test,
-    "org.typelevel" %% "cats-testkit" % "2.2.0" % Test,
+    "org.typelevel" %% "cats-core" % "2.3.1" % Test,
+    "org.typelevel" %% "cats-testkit" % "2.3.1" % Test,
     "org.typelevel" %% "cats-effect-laws" % catsEffectVersion % Test,
     "org.typelevel" %% "cats-effect-testkit" % catsEffectVersion % Test,
     "com.h2database" % "h2" % "1.4.200" % Test,
-    "org.typelevel" %% "cats-testkit-scalatest" % "1.0.0" % Test
+    "org.typelevel" %% "cats-testkit-scalatest" % "2.1.1" % Test
   ) ++ compilerPlugins(scalaVersion.value)
 )
 
@@ -75,7 +75,7 @@ val examples = project
     publishArtifact := false,
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % catsEffectVersion,
-      "org.typelevel" %% "cats-tagless-macros" % "0.11",
+      "org.typelevel" %% "cats-tagless-macros" % "0.12",
       "org.postgresql" % "postgresql" % "42.2.18",
       compilerPlugin(
         "org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full
