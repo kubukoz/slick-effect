@@ -41,7 +41,6 @@ val commonSettings = Seq(
     "com.typesafe.slick" %% "slick" % "3.3.3",
     "org.typelevel" %% "cats-effect-kernel" % catsEffectVersion,
     "org.typelevel" %% "cats-effect-std" % catsEffectVersion,
-    "org.typelevel" %% "cats-core" % "2.3.1" % Test,
     "org.typelevel" %% "cats-testkit" % "2.3.1" % Test,
     "org.typelevel" %% "cats-effect-laws" % catsEffectVersion % Test,
     "org.typelevel" %% "cats-effect-testkit" % catsEffectVersion % Test,

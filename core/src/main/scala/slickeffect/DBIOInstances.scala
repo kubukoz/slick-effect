@@ -9,9 +9,24 @@ import scala.concurrent.ExecutionContext
 import cats.~>
 import cats.effect.kernel.Sync
 import cats.effect.std.Dispatcher
+import cats.effect.kernel.CancelScope
+import cats.effect.kernel.Poll
 
 private[slickeffect] final class DBIOSync(implicit ec: ExecutionContext)
   extends Sync[DBIO] {
+
+  def rootCancelScope: CancelScope = CancelScope.Uncancelable
+
+  def forceR[A, B](fa: DBIO[A])(fb: DBIO[B]): DBIO[B] =
+    productR(attempt(fa))(fb)
+
+  def uncancelable[A](body: Poll[DBIO] => DBIO[A]): DBIO[A] =
+    body(new Poll[DBIO] { def apply[X](fa: DBIO[X]): DBIO[X] = fa })
+
+  def canceled: DBIO[Unit] = unit
+
+  // There is no cancel.
+  def onCancel[A](fa: DBIO[A], fin: DBIO[Unit]): DBIO[A] = fa
 
   override val realTime: slick.dbio.DBIO[FiniteDuration] = delay(
     System.currentTimeMillis().millis

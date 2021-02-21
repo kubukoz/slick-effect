@@ -15,10 +15,10 @@ import scala.concurrent.duration._
 import scala.util.Try
 import cats.tests.CatsSuite
 import cats.effect.laws.SyncTests
-import cats.effect.testkit.SyncTypeGenerators._
+import cats.effect.testkit.TestInstances
 import org.scalacheck.Prop
 
-class DBIOInstanceTests extends CatsSuite {
+class DBIOInstanceTests extends CatsSuite with TestInstances {
   import slickeffect.implicits._
 
   private val timeout = 3.seconds
