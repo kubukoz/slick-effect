@@ -1,4 +1,4 @@
-val Scala_2_11 = "2.11.12"
+val Scala_2_11 = "2.13.5"
 val Scala_2_12 = "2.12.10"
 val Scala_2_13 = "2.13.0"
 
