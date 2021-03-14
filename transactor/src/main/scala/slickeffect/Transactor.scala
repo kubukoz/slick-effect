@@ -20,8 +20,7 @@ trait Transactor[F[_]] {
 object Transactor {
   def apply[F[_]](implicit F: Transactor[F]): Transactor[F] = F
 
-  /**
-    * Creates a Transactor from a factory of databases.
+  /** Creates a Transactor from a factory of databases.
     * This transactor doesn't actually run the DBIO actions in transactions by default.
     * If you want transactions, see [[slickeffect.transactor.config.transactionally]] and its Scaladoc.
     */
