@@ -1,5 +1,5 @@
 val Scala_2_12 = "2.12.13"
-val Scala_2_13 = "2.13.4"
+val Scala_2_13 = "2.13.5"
 
 val catsEffectVersion = "3.0.0-RC2"
 
@@ -96,14 +96,13 @@ val transactor =
 val examples = project
   .settings(
     commonSettings,
+    scalacOptions ++= Seq("-Ymacro-annotations"),
+    skip := !scalaVersion.value.startsWith("2.13"),
     skip in publish := true,
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % catsEffectVersion,
       "org.typelevel" %% "cats-tagless-macros" % "0.12",
-      "org.postgresql" % "postgresql" % "42.2.18",
-      compilerPlugin(
-        "org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full
-      )
+      "org.postgresql" % "postgresql" % "42.2.18"
     ),
     mimaPreviousArtifacts := Set.empty
   )
