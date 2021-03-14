@@ -9,7 +9,9 @@ Compatibility tools for Slick + cats-effect. Released for Scala 2.12 and 2.13.
 Add the dependency. SBT:
 
 ```sbt
-"com.kubukoz" %% "slick-effect" % "0.3.0"
+"com.kubukoz" %% "slick-effect" % "0.3.0",
+// for the LiftIO instance
+"com.kubukoz" %% "slick-effect-catsio" % "0.3.0"
 ```
 
 Ammonite:
@@ -46,7 +48,7 @@ Cats Effect 3 changes the hierarchy of the type classes that are available, in a
 To work around that limitation and ensure you can still combine `Async` with `DBIO` _somehow_, you can do one of these two things:
 
 - Given an `Async[F]` for some `F[_]` (like `IO`), use `slickeffect.liftEffectToDBIO` to get a `Resource[F, F ~> DBIO]`, which you can `.use` and pass the value inside it whenever you need a conversion
-- Use `LiftIO[DBIO]` from the new `catsio` module, which serves as a `IO ~> DBIO` without a resource. This one requires an `IORuntime`, so you might want to import `cats.effect.unsafe.implicits.global` when defining this instance.
+- Use `LiftIO[DBIO]` from the new `catsio` module, which serves as a `IO ~> DBIO` without a resource. This one requires an `IORuntime`, a non-implicit one is provided inside `IOApp`, so you can pass that when defining this instance.
 
 These should be useful to anyone who was using `Async[DBIO]` previously - for example, if you were instantiating a Tagless Final algebra that required `Async`:
 
