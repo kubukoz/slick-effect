@@ -71,7 +71,7 @@ val transactor =
 val examples = project
   .settings(
     commonSettings,
-    publishArtifact := false,
+    skip in publish := true,
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % catsEffectVersion,
       "org.typelevel" %% "cats-tagless-macros" % "0.12",
@@ -89,7 +89,7 @@ val root =
     .in(file("."))
     .settings(
       mimaPreviousArtifacts := Set.empty,
-      publishArtifact := false,
+      skip in publish := true,
       scalaVersion := Scala_2_12
     )
     .aggregate(core, catsio, transactor, examples)
