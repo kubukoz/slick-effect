@@ -93,11 +93,18 @@ val transactor =
     name := "slick-effect-transactor"
   )
 
+def macroAnnotations(scalaVersion: String) =
+  if (scalaVersion.startsWith("2.13"))
+    scalacOptions += "-Ymacro-annotations"
+  else
+    libraryDependencies +=
+      compilerPlugin(
+        "org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full
+      )
+
 val examples = project
   .settings(
     commonSettings,
-    scalacOptions ++= Seq("-Ymacro-annotations"),
-    skip := !scalaVersion.value.startsWith("2.13"),
     skip in publish := true,
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % catsEffectVersion,
@@ -106,6 +113,7 @@ val examples = project
     ),
     mimaPreviousArtifacts := Set.empty
   )
+  .settings(macroAnnotations(scalaVersion.value))
   .dependsOn(core, catsio, transactor)
 
 val root =
