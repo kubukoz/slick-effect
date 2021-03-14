@@ -21,6 +21,34 @@ inThisBuild(
   )
 )
 
+val GraalVM11 = "graalvm-ce-java11@20.3.0"
+
+ThisBuild / scalaVersion := Scala_2_12
+ThisBuild / crossScalaVersions := Seq(Scala_2_13)
+ThisBuild / githubWorkflowJavaVersions := Seq(GraalVM11)
+ThisBuild / githubWorkflowBuild := Seq(
+  WorkflowStep.Sbt(List("test", "mimaReportBinaryIssues"))
+)
+
+//sbt-ci-release settings
+ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
+ThisBuild / githubWorkflowPublishTargetBranches := Seq(
+  RefPredicate.StartsWith(Ref.Branch("main")),
+  RefPredicate.StartsWith(Ref.Tag("v"))
+)
+ThisBuild / githubWorkflowPublishPreamble := Seq(
+  WorkflowStep.Use(UseRef.Public("olafurpg", "setup-gpg", "v3"))
+)
+ThisBuild / githubWorkflowPublish := Seq(WorkflowStep.Sbt(List("ci-release")))
+ThisBuild / githubWorkflowEnv ++= List(
+  "PGP_PASSPHRASE",
+  "PGP_SECRET",
+  "SONATYPE_PASSWORD",
+  "SONATYPE_USERNAME"
+).map { envKey =>
+  envKey -> s"$${{ secrets.$envKey }}"
+}.toMap
+
 def compilerPlugins(scalaVersion: String) =
   List(
     compilerPlugin(
@@ -29,10 +57,7 @@ def compilerPlugins(scalaVersion: String) =
   )
 
 val commonSettings = Seq(
-  scalaVersion := Scala_2_12,
-  Options.addAll,
   fork in Test := true,
-  crossScalaVersions := Seq(Scala_2_12, Scala_2_13),
   //uncomment after release for CE3
   mimaPreviousArtifacts := (Set(
     /* organization.value %% name.value % "0.1.0" */
