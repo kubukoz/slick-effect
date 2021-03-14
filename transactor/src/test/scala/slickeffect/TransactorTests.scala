@@ -1,18 +1,19 @@
 package slickeffect
 
-import cats.effect.{ContextShift, IO}
-import org.scalatest.Matchers
+import cats.effect.IO
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
 import slick.dbio.DBIO
-import slick.jdbc.{H2Profile, JdbcProfile}
+import slick.jdbc.H2Profile
+import slick.jdbc.JdbcProfile
 import slickeffect.transactor.config
 
-import scala.concurrent.ExecutionContext
+import cats.effect.unsafe.IORuntime
 
 class TransactorTests extends AsyncWordSpec with Matchers {
+
   "fromDatabase" should {
     "make it possible to run actions" in {
-      implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
       implicit val profile: JdbcProfile = H2Profile
 
@@ -26,6 +27,6 @@ class TransactorTests extends AsyncWordSpec with Matchers {
         .map(_.configure(config.transactionally))
         .use(_.transact(action))
         .map(_ shouldBe 1)
-    }.unsafeToFuture()
+    }.unsafeToFuture()(IORuntime.global)
   }
 }

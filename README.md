@@ -1,8 +1,8 @@
 # slick-effect
 
-[![License](http://img.shields.io/:license-Apache%202-green.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
+[![License](https://img.shields.io/:license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-Compatibility tools for Slick + cats-effect. Released for Scala 2.12 and 2.11.
+Compatibility tools for Slick + cats-effect. Released for Scala 2.12 and 2.13.
 
 ## Usage
 
@@ -35,9 +35,44 @@ import slickeffect.implicits._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 //the instances will be in implicit scope
-scala> Async[slick.dbio.DBIO]
-res0: Async[slick.dbio.package.DBIO] = slickeffect.DBIOAsync@434c179e
+scala> Sync[slick.dbio.DBIO]
+res0: Sync[slick.dbio.package.DBIO] = slickeffect.DBIOSync@434c179e
 ```
+
+### Cats Effect 1.x/2.x -> 3.x migration guide
+
+Cats Effect 3 changes the hierarchy of the type classes that are available, in a way that only lets us implement `Sync` and `LiftIO`. This means we're losing the old `Async`.
+
+To work around that limitation and ensure you can still combine `Async` with `DBIO` _somehow_, you can do one of these two things:
+
+- Given an `Async[F]` for some `F[_]` (like `IO`), use `slickeffect.liftEffectToDBIO` to get a `Resource[F, F ~> DBIO]`, which you can `.use` and pass the value inside it whenever you need a conversion
+- Use `LiftIO[DBIO]` from the new `catsio` module, which serves as a `IO ~> DBIO` without a resource. This one requires an `IORuntime`, so you might want to import `cats.effect.unsafe.implicits.global` when defining this instance.
+
+These should be useful to anyone who was using `Async[DBIO]` previously - for example, if you were instantiating a Tagless Final algebra that required `Async`:
+
+```scala
+trait Client[F[_]] {
+  def call: F[Unit]
+}
+
+def asyncClient[F[_]: Async]: Client[F] = ...
+```
+
+**It is now impossible to directly get a `Client[DBIO]`, because of the `Async` constraint**. However, it is still possible to get to that instance through `IO` or any other type that you have a `~> DBIO` for:
+
+```scala
+val ioClient: Client[IO] = asyncClient[IO]
+
+implicit val clientFunctorK: FunctorK[Client] = Derive.functorK
+
+val dbioClient: Client[DBIO] = ioClient.mapK(slickeffect.liftToDBIO[IO])
+```
+
+`FunctorK` and `Derive` come from [cats-tagless](https://github.com/typelevel/cats-tagless) (`Derive.functorK` is a macro from the `macros` module).
+A manually written instance of `FunctorK` would also work (these are usually trivial to write). For more complicated interfaces,
+such as ones that have methods taking `F[_]`-shaped arguments, check out other type classes in cats-tagless (`InvariantK`, `ContravariantK`, etc.).
+
+For a full usage of this pattern, check [the examples](examples/src/main/scala/com/example/Demo.scala).
 
 ### [EXPERIMENTAL] Transactor (from 0.3.0-M2 onwards)
 
