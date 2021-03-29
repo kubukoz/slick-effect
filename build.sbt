@@ -58,7 +58,7 @@ def compilerPlugins(scalaVersion: String) =
   )
 
 val commonSettings = Seq(
-  fork in Test := true,
+  Test / fork := true,
   //uncomment after release for CE3
   mimaPreviousArtifacts := (Set(
     /* organization.value %% name.value % "0.1.0" */
@@ -112,7 +112,7 @@ def versionSpecificOptions(scalaVersion: String) =
 val examples = project
   .settings(
     commonSettings,
-    skip in publish := true,
+    publish / skip := true,
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % catsEffectVersion,
       "org.typelevel" %% "cats-tagless-macros" % "0.12",
@@ -129,7 +129,7 @@ val root =
     .in(file("."))
     .settings(
       mimaPreviousArtifacts := Set.empty,
-      skip in publish := true,
+      publish / skip := true,
       scalaVersion := Scala_2_12
     )
     .aggregate(core, catsio, transactor, examples)
