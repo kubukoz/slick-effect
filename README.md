@@ -1,5 +1,7 @@
 # slick-effect
 
+![Continuous Integration](https://github.com/kubukoz/slick-effect/workflows/Continuous%20Integration/badge.svg)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.kubukoz/slick-effect_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.kubukoz/slick-effect_2.12)
 [![License](https://img.shields.io/:license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 Compatibility tools for Slick + cats-effect. Released for Scala 2.12 and 2.13.
