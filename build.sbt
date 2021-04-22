@@ -116,7 +116,7 @@ val examples = project
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % catsEffectVersion,
       "org.typelevel" %% "cats-tagless-macros" % "0.13.0",
-      "org.postgresql" % "postgresql" % "42.2.19"
+      "org.postgresql" % "postgresql" % "42.2.20"
     ),
     mimaPreviousArtifacts := Set.empty
   )
