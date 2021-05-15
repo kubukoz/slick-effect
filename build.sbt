@@ -53,7 +53,7 @@ ThisBuild / githubWorkflowEnv ++= List(
 def compilerPlugins(scalaVersion: String) =
   List(
     compilerPlugin(
-      "org.typelevel" % "kind-projector" % "0.12.0" cross CrossVersion.full
+      "org.typelevel" % "kind-projector" % "0.13.0" cross CrossVersion.full
     )
   )
 
