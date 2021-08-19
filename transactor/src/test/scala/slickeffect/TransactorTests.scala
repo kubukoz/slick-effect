@@ -7,7 +7,6 @@ import slick.dbio.DBIO
 import slick.jdbc.H2Profile
 import slick.jdbc.JdbcProfile
 import slickeffect.transactor.config
-
 import cats.effect.unsafe.IORuntime
 
 class TransactorTests extends AsyncWordSpec with Matchers {

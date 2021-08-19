@@ -8,7 +8,6 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import slick.dbio.DBIO
 import slick.jdbc.H2Profile
-
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._

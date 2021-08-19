@@ -5,7 +5,6 @@ import scala.util.Success
 import slick.dbio.DBIO
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext
-
 import cats.~>
 import cats.effect.kernel.Sync
 import cats.effect.std.Dispatcher

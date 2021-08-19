@@ -1,7 +1,6 @@
 package com.example
 
 import scala.concurrent.ExecutionContext
-
 import cats.FlatMap
 import cats.effect.IO
 import cats.effect.IOApp
