@@ -1,7 +1,6 @@
 package slickeffect
 
 import slick.dbio.DBIO
-
 import scala.concurrent.ExecutionContext
 import cats.effect.kernel.Sync
 
