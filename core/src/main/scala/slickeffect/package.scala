@@ -1,4 +1,5 @@
 import slick.dbio.DBIO
+
 import cats.~>
 import scala.concurrent.ExecutionContext
 import cats.effect.kernel.Async
