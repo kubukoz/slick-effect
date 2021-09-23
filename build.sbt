@@ -1,7 +1,7 @@
 val Scala_2_12 = "2.12.13"
 val Scala_2_13 = "2.13.5"
 
-val catsEffectVersion = "3.1.1"
+val catsEffectVersion = "3.2.9"
 
 inThisBuild(
   List(
@@ -53,7 +53,7 @@ ThisBuild / githubWorkflowEnv ++= List(
 def compilerPlugins(scalaVersion: String) =
   List(
     compilerPlugin(
-      "org.typelevel" % "kind-projector" % "0.13.0" cross CrossVersion.full
+      "org.typelevel" % "kind-projector" % "0.13.2" cross CrossVersion.full
     )
   )
 

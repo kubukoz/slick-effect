@@ -8,8 +8,7 @@ object config {
 
   /** Usage:
     *
-    * import slickeffect.config._
-    * def xa: SlickTransactor[F]
+    * import slickeffect.config._ def xa: SlickTransactor[F]
     *
     * def withTransactions: SlickTransactor[F] = xa.configure(transactionally)
     */
