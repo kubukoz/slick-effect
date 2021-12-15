@@ -1,7 +1,7 @@
-val Scala_2_12 = "2.12.15"
-val Scala_2_13 = "2.13.5"
+val Scala_2_12 = "2.12.13"
+val Scala_2_13 = "2.13.7"
 
-val catsEffectVersion = "3.1.1"
+val catsEffectVersion = "3.2.9"
 
 inThisBuild(
   List(
@@ -59,7 +59,7 @@ def compilerPlugins(scalaVersion: String) =
 
 val commonSettings = Seq(
   Test / fork := true,
-  //uncomment after release for CE3
+  // uncomment after release for CE3
   mimaPreviousArtifacts := (Set(
     /* organization.value %% name.value % "0.1.0" */
   )),
@@ -116,7 +116,7 @@ val examples = project
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % catsEffectVersion,
       "org.typelevel" %% "cats-tagless-macros" % "0.14.0",
-      "org.postgresql" % "postgresql" % "42.2.23"
+      "org.postgresql" % "postgresql" % "42.2.24"
     ),
     mimaPreviousArtifacts := Set.empty
   )
