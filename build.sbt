@@ -1,7 +1,7 @@
 val Scala_2_12 = "2.12.15"
 val Scala_2_13 = "2.13.8"
 
-val catsEffectVersion = "3.3.5"
+val catsEffectVersion = "3.3.6"
 
 inThisBuild(
   List(
