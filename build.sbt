@@ -64,7 +64,7 @@ val commonSettings = Seq(
     /* organization.value %% name.value % "0.1.0" */
   )),
   libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick" % "3.3.3",
+    "com.typesafe.slick" %% "slick" % "3.4.0",
     "org.typelevel" %% "cats-effect-kernel" % catsEffectVersion,
     "org.typelevel" %% "cats-effect-std" % catsEffectVersion,
     "org.typelevel" %% "cats-testkit" % "2.7.0" % Test,
