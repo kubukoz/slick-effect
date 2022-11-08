@@ -1,5 +1,5 @@
-val Scala_2_12 = "2.12.16"
-val Scala_2_13 = "2.13.8"
+val Scala_2_12 = "2.12.17"
+val Scala_2_13 = "2.13.10"
 
 val catsEffectVersion = "3.3.14"
 
