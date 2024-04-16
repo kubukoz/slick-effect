@@ -114,7 +114,7 @@ val examples = project
     commonSettings,
     publish / skip := true,
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect" % catsEffectVersion,
+      "org.typelevel" %% "cats-effect-kernel" % catsEffectVersion,
       "org.typelevel" %% "cats-tagless-macros" % "0.15.0",
       "org.postgresql" % "postgresql" % "42.7.3"
     ),
