@@ -1,3 +1,11 @@
+ThisBuild / tlBaseVersion := "0.6"
+ThisBuild / organization := "com.kubukoz"
+ThisBuild / organizationName := "Jakub Kozłowski"
+ThisBuild / startYear := Some(2019)
+ThisBuild / licenses := Seq(License.Apache2)
+ThisBuild / developers := List(tlGitHubDev("kubukoz", "Jakub Kozłowski"))
+ThisBuild / tlSonatypeUseLegacyHost := false
+
 val Scala_2_12 = "2.12.17"
 val Scala_2_13 = "2.13.13"
 
@@ -5,49 +13,10 @@ val Scala_3 = "3.3.3"
 
 val catsEffectVersion = "3.5.4"
 
-inThisBuild(
-  List(
-    organization := "com.kubukoz",
-    homepage := Some(url("https://github.com/kubukoz/slick-effect")),
-    licenses := List(
-      "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
-    ),
-    developers := List(
-      Developer(
-        "kubukoz",
-        "Jakub Kozłowski",
-        "kubukoz@gmail.com",
-        url("https://kubukoz.com")
-      )
-    )
-  )
-)
-
 ThisBuild / scalaVersion := Scala_2_12
 ThisBuild / crossScalaVersions := Seq(Scala_2_12, Scala_2_13, Scala_3)
-ThisBuild / githubWorkflowBuild := Seq(
-  WorkflowStep.Sbt(List("test", "mimaReportBinaryIssues"))
-)
-ThisBuild / versionScheme := Some("early-semver")
 
-//sbt-ci-release settings
-ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
-ThisBuild / githubWorkflowPublishTargetBranches := Seq(
-  RefPredicate.StartsWith(Ref.Branch("main")),
-  RefPredicate.StartsWith(Ref.Tag("v"))
-)
-ThisBuild / githubWorkflowPublishPreamble := Seq(
-  WorkflowStep.Use(UseRef.Public("olafurpg", "setup-gpg", "v3"))
-)
-ThisBuild / githubWorkflowPublish := Seq(WorkflowStep.Sbt(List("ci-release")))
-ThisBuild / githubWorkflowEnv ++= List(
-  "PGP_PASSPHRASE",
-  "PGP_SECRET",
-  "SONATYPE_PASSWORD",
-  "SONATYPE_USERNAME"
-).map { envKey =>
-  envKey -> s"$${{ secrets.$envKey }}"
-}.toMap
+ThisBuild / tlFatalWarnings := false
 
 def compilerPlugins(scalaVersion: String) =
   if (scalaVersion.startsWith("3.")) Nil
@@ -117,8 +86,7 @@ val root =
   project
     .in(file("."))
     .settings(
-      mimaPreviousArtifacts := Set.empty,
-      publish / skip := true,
-      scalaVersion := Scala_2_12
+      publish / skip := true
     )
+    .enablePlugins(NoPublishPlugin)
     .aggregate(core, catsio, transactor, examples)

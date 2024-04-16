@@ -1,4 +1,1 @@
-addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.5.12")
-addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.0.1")
-addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat" % "0.1.20")
-addSbtPlugin("com.github.sbt" % "sbt-github-actions" % "0.23.0")
+addSbtPlugin("org.typelevel" % "sbt-typelevel" % "0.6.7")
