@@ -4,7 +4,7 @@ ThisBuild / organizationName := "Jakub Kozłowski"
 ThisBuild / startYear := Some(2019)
 ThisBuild / licenses := Seq(License.Apache2)
 ThisBuild / developers := List(tlGitHubDev("kubukoz", "Jakub Kozłowski"))
-ThisBuild / tlSonatypeUseLegacyHost := true
+ThisBuild / tlSonatypeUseLegacyHost := false
 
 val Scala_2_12 = "2.12.17"
 val Scala_2_13 = "2.13.13"
