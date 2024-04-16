@@ -11,7 +11,7 @@ import cats.syntax.all._
 package object slickeffect {
 
   def liftEffectToDBIO[F[_]: Async]: Resource[F, F ~> DBIO] =
-    (Dispatcher.sequential[F], Async[F].executionContext.toResource)
+    (Dispatcher.parallel[F], Async[F].executionContext.toResource)
       .mapN(liftEffectUsingDispatcher)
 
   def liftEffectUsingDispatcher[F[_]](
