@@ -14,7 +14,9 @@ object config {
     */
   def transactionally(implicit profile: JdbcProfile): DBIO ~> DBIO = {
     import profile.api.{DBIO => _, _}
-    λ[DBIO ~> DBIO](_.transactionally)
+    new (DBIO ~> DBIO) {
+      def apply[A](fa: DBIO[A]): DBIO[A] = fa.transactionally
+    }
   }
 
 }
