@@ -11,21 +11,21 @@ Compatibility tools for Slick + cats-effect. Released for Scala 2.12, 2.13 and S
 Add the dependency. SBT:
 
 ```sbt
-"com.kubukoz" %% "slick-effect" % "0.5.0",
+"com.kubukoz" %% "slick-effect" % "0.6.0",
 // for the LiftIO instance
-"com.kubukoz" %% "slick-effect-catsio" % "0.5.0"
+"com.kubukoz" %% "slick-effect-catsio" % "0.6.0"
 ```
 
 Ammonite:
 
 ```
-$ivy.`com.kubukoz::slick-effect:0.5.0`
+$ivy.`com.kubukoz::slick-effect:0.6.0`
 ```
 
-Coursier:
+Coursier / Scala CLI:
 
 ```
-com.kubukoz::slick-effect:0.5.0
+com.kubukoz::slick-effect:0.6.0
 ```
 
 ### Instances
@@ -85,7 +85,7 @@ You can use slick-effect to run your DBIOs. This functionality is experimental, 
 If you still want to use it, add a dependency on the transactor module:
 
 ```scala
-"com.kubukoz" %% "slick-effect-transactor" % "0.5.0"
+"com.kubukoz" %% "slick-effect-transactor" % "0.6.0"
 ```
 
 Create a transactor:
