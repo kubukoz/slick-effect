@@ -23,11 +23,8 @@ inThisBuild(
   )
 )
 
-val GraalVM11 = "graalvm-ce-java11@20.3.0"
-
 ThisBuild / scalaVersion := Scala_2_12
 ThisBuild / crossScalaVersions := Seq(Scala_2_12, Scala_2_13, Scala_3)
-ThisBuild / githubWorkflowJavaVersions := Seq(GraalVM11)
 ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(List("test", "mimaReportBinaryIssues"))
 )
