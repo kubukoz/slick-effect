@@ -1,5 +1,5 @@
 val Scala_2_12 = "2.12.17"
-val Scala_2_13 = "2.13.10"
+val Scala_2_13 = "2.13.13"
 
 val catsEffectVersion = "3.3.14"
 
@@ -53,24 +53,24 @@ ThisBuild / githubWorkflowEnv ++= List(
 def compilerPlugins(scalaVersion: String) =
   List(
     compilerPlugin(
-      "org.typelevel" % "kind-projector" % "0.13.2" cross CrossVersion.full
+      "org.typelevel" % "kind-projector" % "0.13.3" cross CrossVersion.full
     )
   )
 
 val commonSettings = Seq(
   Test / fork := true,
   // uncomment after release for CE3
-  mimaPreviousArtifacts := (Set(
+  mimaPreviousArtifacts := Set(
     /* organization.value %% name.value % "0.1.0" */
-  )),
+  ),
   libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick" % "3.4.1",
+    "com.typesafe.slick" %% "slick" % "3.5.1",
     "org.typelevel" %% "cats-effect-kernel" % catsEffectVersion,
     "org.typelevel" %% "cats-effect-std" % catsEffectVersion,
-    "org.typelevel" %% "cats-testkit" % "2.7.0" % Test,
+    "org.typelevel" %% "cats-testkit" % "2.10.0" % Test,
     "org.typelevel" %% "cats-effect-laws" % catsEffectVersion % Test,
     "org.typelevel" %% "cats-effect-testkit" % catsEffectVersion % Test,
-    "com.h2database" % "h2" % "2.0.206" % Test,
+    "com.h2database" % "h2" % "2.2.224" % Test,
     "org.typelevel" %% "cats-testkit-scalatest" % "2.1.5" % Test
   ) ++ compilerPlugins(scalaVersion.value)
 )
@@ -115,8 +115,8 @@ val examples = project
     publish / skip := true,
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % catsEffectVersion,
-      "org.typelevel" %% "cats-tagless-macros" % "0.14.0",
-      "org.postgresql" % "postgresql" % "42.3.8"
+      "org.typelevel" %% "cats-tagless-macros" % "0.15.0",
+      "org.postgresql" % "postgresql" % "42.7.3"
     ),
     mimaPreviousArtifacts := Set.empty
   )

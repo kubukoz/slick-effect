@@ -7,6 +7,8 @@ import cats.effect.IO
 import cats.effect.IOApp
 import cats.effect.LiftIO
 import cats.effect.kernel.Async
+import cats.effect.std.Console
+import cats.effect.unsafe.IORuntime
 import cats.syntax.all._
 import cats.tagless.autoFunctorK
 import cats.tagless.finalAlg
@@ -19,12 +21,12 @@ import slickeffect.catsio.implicits._
 import slickeffect.implicits._
 
 object Demo extends IOApp.Simple {
-  implicit val rt = runtime
-  implicit val ec = runtime.compute
+  implicit val rt: IORuntime = runtime
+  implicit val ec: ExecutionContext = runtime.compute
 
   val run: IO[Unit] = {
 
-    implicit val liftIODBIO = LiftIO.liftK[DBIO]
+    implicit val liftIODBIO: IO ~> DBIO = LiftIO.liftK[DBIO]
 
     val resource = for {
       transactor <- Transactor.fromDatabase[IO](
@@ -55,9 +57,9 @@ class Application[F[_]: Async: Transactor](
   fToDBIO: F ~> DBIO
 ) {
   private val fClient = AsyncClient.instance[F]
-  private implicit val dbioClient = fClient.mapK(fToDBIO)
-  private implicit val repo = Repository.instance
-  private implicit val console = cats.effect.std.Console.make[DBIO]
+  private implicit val dbioClient: AsyncClient[DBIO] = fClient.mapK(fToDBIO)
+  private implicit val repo: Repository[DBIO] = Repository.instance
+  private implicit val console: Console[DBIO] = cats.effect.std.Console.make[DBIO]
 
   private val program = Program.instance[DBIO].mapK(Transactor[F].transactK)
 

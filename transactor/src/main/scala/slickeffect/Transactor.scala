@@ -1,13 +1,10 @@
 package slickeffect
 
+import cats.effect.kernel.{Async, Resource, Sync}
 import cats.~>
-import slick.basic.BasicBackend
-import slick.basic.BasicProfile
 import slick.basic.DatabaseConfig
 import slick.dbio.DBIO
-import cats.effect.kernel.Async
-import cats.effect.kernel.Resource
-import cats.effect.kernel.Sync
+import slick.jdbc.{JdbcBackend, JdbcProfile}
 
 trait Transactor[F[_]] {
   def transact[A](dbio: DBIO[A]): F[A] = transactK(dbio)
@@ -26,7 +23,7 @@ object Transactor {
     * its Scaladoc.
     */
   def fromDatabase[F[_]: Async](
-    dbF: F[BasicBackend#DatabaseDef]
+    dbF: F[JdbcBackend#Database]
   ): Resource[F, Transactor[F]] =
     Resource
       .make(dbF)(db => Async[F].fromFuture(Sync[F].delay(db.shutdown)))
@@ -39,7 +36,7 @@ object Transactor {
       }
 
   def fromDatabaseConfig[F[_]: Async](
-    dbConfig: DatabaseConfig[_ <: BasicProfile]
+    dbConfig: DatabaseConfig[_ <: JdbcProfile]
   ): Resource[F, Transactor[F]] =
     fromDatabase(Sync[F].delay(dbConfig.db))
 
