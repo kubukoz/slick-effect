@@ -7,9 +7,9 @@ import cats.effect.IO
 import cats.effect.IOApp
 import cats.effect.LiftIO
 import cats.effect.kernel.Async
+import cats.effect.std.Console
+import cats.effect.unsafe.IORuntime
 import cats.syntax.all._
-import cats.tagless.autoFunctorK
-import cats.tagless.finalAlg
 import cats.tagless.implicits._
 import cats.~>
 import slick.jdbc.JdbcBackend.Database
@@ -17,14 +17,15 @@ import slick.jdbc.PostgresProfile.api._
 import slickeffect.Transactor
 import slickeffect.catsio.implicits._
 import slickeffect.implicits._
+import cats.tagless.FunctorK
 
 object Demo extends IOApp.Simple {
-  implicit val rt = runtime
-  implicit val ec = runtime.compute
+  implicit val rt: IORuntime = runtime
+  implicit val ec: ExecutionContext = runtime.compute
 
   val run: IO[Unit] = {
 
-    implicit val liftIODBIO = LiftIO.liftK[DBIO]
+    implicit val liftIODBIO: IO ~> DBIO = LiftIO.liftK[DBIO]
 
     val resource = for {
       transactor <- Transactor.fromDatabase[IO](
@@ -38,7 +39,7 @@ object Demo extends IOApp.Simple {
                     )
     } yield {
 
-      implicit val xa =
+      implicit val xa: Transactor[IO] =
         transactor.configure(slickeffect.transactor.config.transactionally)
 
       new Application[IO]
@@ -55,21 +56,30 @@ class Application[F[_]: Async: Transactor](
   fToDBIO: F ~> DBIO
 ) {
   private val fClient = AsyncClient.instance[F]
-  private implicit val dbioClient = fClient.mapK(fToDBIO)
-  private implicit val repo = Repository.instance
-  private implicit val console = cats.effect.std.Console.make[DBIO]
+  private implicit val dbioClient: AsyncClient[DBIO] = fClient.mapK(fToDBIO)
+  private implicit val repo: Repository[DBIO] = Repository.instance
+  private implicit val console: Console[DBIO] =
+    cats.effect.std.Console.make[F].mapK(fToDBIO)
 
   private val program = Program.instance[DBIO].mapK(Transactor[F].transactK)
 
   def run = program.run
 }
 
-@autoFunctorK
 trait Program[F[_]] {
   def run: F[Unit]
 }
 
 object Program {
+
+  implicit val functorK: FunctorK[Program] = new FunctorK[Program] {
+
+    def mapK[F[_], G[_]](af: Program[F])(fk: F ~> G): Program[G] =
+      new Program[G] {
+        def run: G[Unit] = fk(af.run)
+      }
+
+  }
 
   def instance[
     F[_]: AsyncClient: Repository: cats.effect.std.Console: FlatMap
@@ -86,12 +96,12 @@ object Program {
 
 }
 
-@finalAlg
 trait Repository[F[_]] {
   def findAll: F[List[String]]
 }
 
 object Repository {
+  def apply[F[_]](implicit ev: Repository[F]): Repository[F] = ev
 
   def instance(implicit ec: ExecutionContext): Repository[DBIO] =
     new Repository[DBIO] {
@@ -101,13 +111,21 @@ object Repository {
 
 }
 
-@autoFunctorK
-@finalAlg
 trait AsyncClient[F[_]] {
   def execute: F[Unit]
 }
 
 object AsyncClient {
+  def apply[F[_]](implicit ev: AsyncClient[F]): AsyncClient[F] = ev
+
+  implicit val functorK: FunctorK[AsyncClient] = new FunctorK[AsyncClient] {
+
+    def mapK[F[_], G[_]](af: AsyncClient[F])(fk: F ~> G): AsyncClient[G] =
+      new AsyncClient[G] {
+        def execute: G[Unit] = fk(af.execute)
+      }
+
+  }
 
   def instance[F[_]: Async]: AsyncClient[F] =
     new AsyncClient[F] {

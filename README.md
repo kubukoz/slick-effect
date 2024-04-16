@@ -4,7 +4,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.kubukoz/slick-effect_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.kubukoz/slick-effect_2.12)
 [![License](https://img.shields.io/:license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-Compatibility tools for Slick + cats-effect. Released for Scala 2.12 and 2.13.
+Compatibility tools for Slick + cats-effect. Released for Scala 2.12, 2.13 and Scala 3 (3.3.x and above).
 
 ## Usage
 

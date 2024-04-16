@@ -1,7 +1,9 @@
 val Scala_2_12 = "2.12.17"
-val Scala_2_13 = "2.13.10"
+val Scala_2_13 = "2.13.13"
 
-val catsEffectVersion = "3.3.14"
+val Scala_3 = "3.3.3"
+
+val catsEffectVersion = "3.5.4"
 
 inThisBuild(
   List(
@@ -24,7 +26,7 @@ inThisBuild(
 val GraalVM11 = "graalvm-ce-java11@20.3.0"
 
 ThisBuild / scalaVersion := Scala_2_12
-ThisBuild / crossScalaVersions := Seq(Scala_2_12, Scala_2_13)
+ThisBuild / crossScalaVersions := Seq(Scala_2_12, Scala_2_13, Scala_3)
 ThisBuild / githubWorkflowJavaVersions := Seq(GraalVM11)
 ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(List("test", "mimaReportBinaryIssues"))
@@ -51,26 +53,26 @@ ThisBuild / githubWorkflowEnv ++= List(
 }.toMap
 
 def compilerPlugins(scalaVersion: String) =
-  List(
+  if (scalaVersion.startsWith("3.")) Nil
+  else
     compilerPlugin(
-      "org.typelevel" % "kind-projector" % "0.13.2" cross CrossVersion.full
-    )
-  )
+      "org.typelevel" % "kind-projector" % "0.13.3" cross CrossVersion.full
+    ) :: Nil
 
 val commonSettings = Seq(
   Test / fork := true,
   // uncomment after release for CE3
-  mimaPreviousArtifacts := (Set(
+  mimaPreviousArtifacts := Set(
     /* organization.value %% name.value % "0.1.0" */
-  )),
+  ),
   libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick" % "3.4.1",
+    "com.typesafe.slick" %% "slick" % "3.5.1",
     "org.typelevel" %% "cats-effect-kernel" % catsEffectVersion,
     "org.typelevel" %% "cats-effect-std" % catsEffectVersion,
-    "org.typelevel" %% "cats-testkit" % "2.7.0" % Test,
+    "org.typelevel" %% "cats-testkit" % "2.10.0" % Test,
     "org.typelevel" %% "cats-effect-laws" % catsEffectVersion % Test,
     "org.typelevel" %% "cats-effect-testkit" % catsEffectVersion % Test,
-    "com.h2database" % "h2" % "2.0.206" % Test,
+    "com.h2database" % "h2" % "2.2.224" % Test,
     "org.typelevel" %% "cats-testkit-scalatest" % "2.1.5" % Test
   ) ++ compilerPlugins(scalaVersion.value)
 )
@@ -94,15 +96,6 @@ val transactor =
     name := "slick-effect-transactor"
   )
 
-def versionSpecificDeps(scalaVersion: String) =
-  if (scalaVersion.startsWith("2.13")) Nil
-  else
-    List(
-      compilerPlugin(
-        "org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full
-      )
-    )
-
 def versionSpecificOptions(scalaVersion: String) =
   if (scalaVersion.startsWith("2.13"))
     List("-Ymacro-annotations")
@@ -114,13 +107,12 @@ val examples = project
     commonSettings,
     publish / skip := true,
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect" % catsEffectVersion,
-      "org.typelevel" %% "cats-tagless-macros" % "0.14.0",
-      "org.postgresql" % "postgresql" % "42.3.8"
+      "org.typelevel" %% "cats-effect-kernel" % catsEffectVersion,
+      "org.typelevel" %% "cats-tagless-core" % "0.15.0",
+      "org.postgresql" % "postgresql" % "42.7.3"
     ),
     mimaPreviousArtifacts := Set.empty
   )
-  .settings(libraryDependencies ++= versionSpecificDeps(scalaVersion.value))
   .settings(scalacOptions ++= versionSpecificOptions(scalaVersion.value))
   .dependsOn(core, catsio, transactor)
 
