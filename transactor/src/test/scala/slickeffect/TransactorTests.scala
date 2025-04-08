@@ -24,7 +24,7 @@ import slick.jdbc.H2Profile
 import slick.jdbc.JdbcProfile
 import slickeffect.transactor.config
 
-import cats.effect.unsafe.IORuntime
+import cats.effect.unsafe.implicits.*
 
 class TransactorTests extends AsyncWordSpec with Matchers {
 
@@ -43,6 +43,6 @@ class TransactorTests extends AsyncWordSpec with Matchers {
         .map(_.configure(config.transactionally))
         .use(_.transact(action))
         .map(_ shouldBe 1)
-    }.unsafeToFuture()(IORuntime.global)
+    }.unsafeToFuture()
   }
 }

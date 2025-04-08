@@ -34,7 +34,10 @@ trait Transactor[F[_]] {
 }
 
 object Transactor {
-  def apply[F[_]](implicit F: Transactor[F]): Transactor[F] = F
+
+  def apply[F[_]](
+    implicit F: Transactor[F]
+  ): Transactor[F] = F
 
   /** Creates a Transactor from a factory of databases. This transactor doesn't
     * actually run the DBIO actions in transactions by default. If you want
@@ -42,7 +45,7 @@ object Transactor {
     * its Scaladoc.
     */
   def fromDatabase[F[_]: Async](
-    dbF: F[JdbcBackend#Database]
+    dbF: F[JdbcBackend#JdbcDatabaseDef]
   ): Resource[F, Transactor[F]] =
     Resource
       .make(dbF)(db => Async[F].fromFuture(Sync[F].delay(db.shutdown)))
@@ -56,7 +59,7 @@ object Transactor {
       }
 
   def fromDatabaseConfig[F[_]: Async](
-    dbConfig: DatabaseConfig[_ <: JdbcProfile]
+    dbConfig: DatabaseConfig[? <: JdbcProfile]
   ): Resource[F, Transactor[F]] =
     fromDatabase(Sync[F].delay(dbConfig.db))
 

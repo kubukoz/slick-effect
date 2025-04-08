@@ -97,9 +97,8 @@ object Program {
 
   }
 
-  def instance[
-    F[_]: AsyncClient: Repository: cats.effect.std.Console: FlatMap
-  ]: Program[F] =
+  def instance[F[_]: AsyncClient: Repository: cats.effect.std.Console: FlatMap]
+    : Program[F] =
     new Program[F] {
 
       val run: F[Unit] =
@@ -117,9 +116,14 @@ trait Repository[F[_]] {
 }
 
 object Repository {
-  def apply[F[_]](implicit ev: Repository[F]): Repository[F] = ev
 
-  def instance(implicit ec: ExecutionContext): Repository[DBIO] =
+  def apply[F[_]](
+    implicit ev: Repository[F]
+  ): Repository[F] = ev
+
+  def instance(
+    implicit ec: ExecutionContext
+  ): Repository[DBIO] =
     new Repository[DBIO] {
       val findAll: DBIO[List[String]] =
         sql"select 'a'".as[String].map(_.toList)
@@ -132,7 +136,10 @@ trait AsyncClient[F[_]] {
 }
 
 object AsyncClient {
-  def apply[F[_]](implicit ev: AsyncClient[F]): AsyncClient[F] = ev
+
+  def apply[F[_]](
+    implicit ev: AsyncClient[F]
+  ): AsyncClient[F] = ev
 
   implicit val functorK: FunctorK[AsyncClient] = new FunctorK[AsyncClient] {
 

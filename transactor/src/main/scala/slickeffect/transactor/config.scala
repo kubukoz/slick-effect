@@ -28,7 +28,9 @@ object config {
     *
     * def withTransactions: SlickTransactor[F] = xa.configure(transactionally)
     */
-  def transactionally(implicit profile: JdbcProfile): DBIO ~> DBIO = {
+  def transactionally(
+    implicit profile: JdbcProfile
+  ): DBIO ~> DBIO = {
     import profile.api.{DBIO => _, _}
     new (DBIO ~> DBIO) {
       def apply[A](fa: DBIO[A]): DBIO[A] = fa.transactionally
