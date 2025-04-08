@@ -34,7 +34,10 @@ trait Transactor[F[_]] {
 }
 
 object Transactor {
-  def apply[F[_]](implicit F: Transactor[F]): Transactor[F] = F
+
+  def apply[F[_]](
+    implicit F: Transactor[F]
+  ): Transactor[F] = F
 
   /** Creates a Transactor from a factory of databases. This transactor doesn't
     * actually run the DBIO actions in transactions by default. If you want

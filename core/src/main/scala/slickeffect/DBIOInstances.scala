@@ -28,8 +28,9 @@ import cats.effect.std.Dispatcher
 import cats.effect.kernel.CancelScope
 import cats.effect.kernel.Poll
 
-private[slickeffect] final class DBIOSync(implicit ec: ExecutionContext)
-  extends Sync[DBIO] {
+private[slickeffect] final class DBIOSync(
+  implicit ec: ExecutionContext
+) extends Sync[DBIO] {
 
   def rootCancelScope: CancelScope = CancelScope.Uncancelable
 
