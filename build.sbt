@@ -6,12 +6,12 @@ ThisBuild / licenses := Seq(License.Apache2)
 ThisBuild / developers := List(tlGitHubDev("kubukoz", "Jakub Kozłowski"))
 ThisBuild / tlSonatypeUseLegacyHost := true
 
-val Scala_2_12 = "2.12.17"
-val Scala_2_13 = "2.13.13"
+val Scala_2_12 = "2.12.20"
+val Scala_2_13 = "2.13.16"
 
-val Scala_3 = "3.3.3"
+val Scala_3 = "3.3.5"
 
-val catsEffectVersion = "3.5.4"
+val catsEffectVersion = "3.6.1"
 
 ThisBuild / scalaVersion := Scala_2_12
 ThisBuild / crossScalaVersions := Seq(Scala_2_12, Scala_2_13, Scala_3)
@@ -32,10 +32,10 @@ val commonSettings = Seq(
     /* organization.value %% name.value % "0.1.0" */
   ),
   libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick" % "3.5.1",
+    "com.typesafe.slick" %% "slick" % "3.6.0",
     "org.typelevel" %% "cats-effect-kernel" % catsEffectVersion,
     "org.typelevel" %% "cats-effect-std" % catsEffectVersion,
-    "org.typelevel" %% "cats-testkit" % "2.10.0" % Test,
+    "org.typelevel" %% "cats-testkit" % "2.13.0" % Test,
     "org.typelevel" %% "cats-effect-laws" % catsEffectVersion % Test,
     "org.typelevel" %% "cats-effect-testkit" % catsEffectVersion % Test,
     "com.h2database" % "h2" % "2.2.224" % Test,
@@ -74,7 +74,7 @@ val examples = project
     publish / skip := true,
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect-kernel" % catsEffectVersion,
-      "org.typelevel" %% "cats-tagless-core" % "0.15.0",
+      "org.typelevel" %% "cats-tagless-core" % "0.16.3",
       "org.postgresql" % "postgresql" % "42.7.3"
     ),
     mimaPreviousArtifacts := Set.empty
