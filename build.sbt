@@ -27,10 +27,6 @@ def compilerPlugins(scalaVersion: String) =
 
 val commonSettings = Seq(
   Test / fork := true,
-  // uncomment after release for CE3
-  mimaPreviousArtifacts := Set(
-    /* organization.value %% name.value % "0.1.0" */
-  ),
   libraryDependencies ++= Seq(
     "com.typesafe.slick" %% "slick" % "3.6.0",
     "org.typelevel" %% "cats-effect-kernel" % catsEffectVersion,
